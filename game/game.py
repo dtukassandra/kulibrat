@@ -1,4 +1,4 @@
-# Game loop & player interaction
+# game.py
 
 from game.board import Kulibrat
 from game.rules import get_legal_moves
@@ -9,16 +9,34 @@ def play_human_vs_human():
         game.print_board()
         moves = get_legal_moves(game)
         if not moves:
-            print(f"Game Over! Final Score: {game.scores}")
-            break
+            print("No moves! Checking next player’s turn.")
+            # According to Kulibrat, if no moves, the other player goes again
+            old_player = game.current_player
+            game.current_player = "R" if old_player == "B" else "B"
 
-        print(f"Legal Moves: {moves}")
-        move = input(f"Player {game.current_player}, choose a move: ")
-        move = eval(move)  # Convert input string to tuple
-        if move in moves:
-            game.make_move(move)
-        else:
-            print("Invalid move, try again!")
+            # Check if *that* player also has no moves => game over
+            if not get_legal_moves(game):
+                print(f"No moves for either player! Game ends.")
+                break
+            else:
+                # we continue with the new current player
+                continue
 
-if __name__ == "__main__":
-    play_human_vs_human()
+        # Prompt user. We might do `move = input(...)` etc.
+        print("Legal moves are:")
+        for i,m in enumerate(moves):
+            print(f"{i}: {m}")
+
+        choice = input("Pick a move index: ")
+        try:
+            idx = int(choice)
+            if 0 <= idx < len(moves):
+                game.make_move(moves[idx])
+            else:
+                print("Invalid index.")
+        except ValueError:
+            print("Please enter a number.")
+
+    print("Final board state:")
+    game.print_board()
+    print("Game over.")
