@@ -14,5 +14,4 @@ class Kulibrat:
             print(" ".join(row))
         print(f"Scores: Black={self.scores['B']}, Red={self.scores['R']}\n")
 
-ny ændring
-
+hej
