@@ -15,3 +15,5 @@ class Kulibrat:
         print(f"Scores: Black={self.scores['B']}, Red={self.scores['R']}\n")
 
 hej
+
+please virk
