@@ -1,4 +1,4 @@
-# board.py
+#board.py
 
 class Kulibrat:
     def __init__(self, win_score=5):

@@ -1,4 +1,4 @@
-# player.py
+#player.py
 
 class HumanPlayer:
     def __init__(self, game):

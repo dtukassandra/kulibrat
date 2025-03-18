@@ -1,3 +1,4 @@
+#game.py
 from game.board import Kulibrat
 from game.rules import get_legal_moves
 

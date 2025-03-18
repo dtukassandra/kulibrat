@@ -1,3 +1,4 @@
+#rules
 def get_legal_moves(board, current_player, players):
     moves = []
     start_row = 0 if current_player == "B" else 3

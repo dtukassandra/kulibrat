@@ -1,4 +1,4 @@
-# random_agent.py
+#random_agent.py
 
 import random
 from game.rules import get_legal_moves
