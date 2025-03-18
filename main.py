@@ -57,7 +57,7 @@ def play_game():
     # Final board state
     print("Final board state:")
     game.print_board()
-    print(f"Final Score: 👤={game.scores['B']}  🤖={game.scores['R']}")
+    print(f"Final Score: B={game.scores['B']}  R={game.scores['R']}")
 
 if __name__ == "__main__":
     play_game()

@@ -33,21 +33,19 @@ class Kulibrat:
     def print_board(self):
         """
         Display the current state of the game:
-         - Show whose turn it is, replacing "B" with "👤" and "R" with "🤖"
-         - Print the board with the same replacements
-         - Show scores and pieces in reserve with the same emoji representation
+         - Show whose turn it is
+         - Print the board
+         - Show scores and pieces in reserve
         """
-        # Show current player with an emoji
-        player_icon = "👤" if self.current_player == "B" else "🤖"
-        print(f"Current Player: {player_icon}")
+        print(f"Current Player: {self.current_player}")
 
-        # Convert 'B' to '👤' and 'R' to '🤖' ONLY for display
+        # Print board normally with B and R for players
         for row in self.board:
-            print(" ".join(cell.replace("B", "👤").replace("R", "🤖") for cell in row))
+            print(" ".join(row))
 
-        # Display scores and pieces left, using emoji representation
-        print(f"Scores: 👤={self.scores['B']}, 🤖={self.scores['R']}")
-        print(f"Pieces in reserve: 👤={self.players['B']} 🤖={self.players['R']}")
+        # Display scores and pieces left for each player
+        print(f"Scores: B={self.scores['B']}, R={self.scores['R']}")
+        print(f"Pieces in reserve: B={self.players['B']} R={self.players['R']}")
         print("-" * 20)
 
     def make_move(self, move):

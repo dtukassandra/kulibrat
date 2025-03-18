@@ -16,7 +16,7 @@ class MinimaxAI:
     def choose_move(self, available_moves=None):
         """
         Returns the best move based on Minimax.
-        :param available_moves: A list of available moves (optional).
+        :param available_moves: A list of available moves.
         :return: The best move tuple.
         """
         if available_moves is None:
@@ -25,10 +25,10 @@ class MinimaxAI:
             return None  # No moves possible
 
         best_move = None
-        best_score = float('-inf')
+        best_score = float('-inf') #starting with the lowest score possible
 
         for move in available_moves:
-            # Simulate the move
+            # Simulate the move by copying the board
             game_copy = copy.deepcopy(self.game)
             game_copy.make_move(move)
 
@@ -77,8 +77,68 @@ class MinimaxAI:
     def _evaluate_board(self, game):
         """
         Evaluates the board state for Minimax.
-        :param game: A simulated game state.
-        :return: A heuristic score.
+
+        New Criteria:
+        - Score difference (primary goal, since scoring wins the game)
+        - Attack potential (prioritize capturing opponent pieces)
+        - Jump potential (prioritize jumps, since they can score)
+        - Piece advancement (encourage moving forward)
+        - Mobility (avoid getting trapped)
+        - Blocking opponent's jumps (reduce opponent options)
         """
-        # Basic heuristic: Difference in scores
-        return game.scores["B"] - game.scores["R"]
+
+        # Weights for different factors
+        score_weight = 15  # Scoring is most important
+        attack_weight = 10  # Higher priority on attacking opponent pieces
+        jump_weight = 12  # Slightly below scoring, but still important
+        position_weight = 2  # Still rewards advancement but less than before
+        mobility_weight = 1  # Keeps options open
+        block_weight = 5  # Discourage opponent movement
+
+        # Score difference (main objective)
+        score_eval = (game.scores["B"] - game.scores["R"]) * score_weight
+
+        position_eval = 0
+        attack_eval = 0
+        jump_eval = 0
+        mobility_eval = 0
+        block_eval = 0
+
+        black_moves = get_legal_moves(game)
+        red_moves = get_legal_moves(game)
+
+        for r in range(4):
+            for c in range(3):
+                piece = game.board[r][c]
+
+                if piece == "B":  # Black (our AI's pieces)
+                    position_eval += (3 - r) * position_weight  # Moving forward is good
+
+                    # Check if this piece is in a position to attack Red
+                    if (r + 1 < 4) and game.board[r + 1][c] == "R":
+                        attack_eval += attack_weight  # Encourage attacking Red
+
+                    # Check if this piece can perform a jump move
+                    if (r + 2 < 4) and game.board[r + 1][c] == "R" and game.board[r + 2][c] == ".":
+                        jump_eval += jump_weight  # Encourage jumps over enemy
+
+                elif piece == "R":  # Red (opponent)
+                    position_eval -= r * position_weight  # Encourage moving forward
+
+                    # Check if this piece is in a position to attack Black
+                    if (r - 1 >= 0) and game.board[r - 1][c] == "B":
+                        attack_eval -= attack_weight  # Discourage being attacked
+
+                    # Check if this piece can perform a jump move
+                    if (r - 2 >= 0) and game.board[r - 1][c] == "B" and game.board[r - 2][c] == ".":
+                        jump_eval -= jump_weight  # Discourage opponent jumps
+
+        # Blocking opponent: If Black has many moves and Red has few, it's good for Black
+        block_eval = (len(black_moves) - len(red_moves)) * block_weight
+
+        # Mobility: Encourage keeping options open
+        mobility_eval += len(black_moves) * mobility_weight
+        mobility_eval -= len(red_moves) * mobility_weight  # If Red has many moves, that's bad for Black
+
+        # Final heuristic score
+        return score_eval + attack_eval + jump_eval + position_eval + mobility_eval + block_eval
