@@ -17,7 +17,7 @@ def choose_agent(game):
     while True:
         choice = input("Enter choice (1-3): ")
         if choice == "1":
-            HumanPlayer()  # Use game.py for human vs human mode
+            HumanPlayer(game)  # Use game.py for human vs human mode
             return None  # Exit after human vs human game ends
         elif choice == "2":
             return RandomAI(game)
