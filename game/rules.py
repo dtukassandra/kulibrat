@@ -4,7 +4,7 @@ def get_legal_moves(board, current_player, players):
     opponent = "R" if current_player == "B" else "B"
 
     # Insert move
-    if players[current_player] > 0:
+    if players[current_player].score > 0:  # Ensure we compare an integer
         for col in range(3):
             if board[start_row][col] == ".":
                 moves.append(("insert", col))

@@ -8,6 +8,7 @@ class HumanPlayer:
         or access other game details if needed.
         """
         self.game = game
+        self.score = 0  # Added score attribute to avoid errors
 
     def choose_move(self, available_moves):
         """
