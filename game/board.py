@@ -1,7 +1,7 @@
 # board.py
 
 class Kulibrat:
-    def __init__(self):
+    def __init__(self, win_score=5):
         """
         Here I'm setting up the board as a 4x3 grid.
         Each spot can be:
@@ -29,6 +29,9 @@ class Kulibrat:
         current_player: we let Black start the game by default.
         """
         self.current_player = "B"
+        "Would be nice to make win_score dynamic so we won't have to change here and in main"
+
+        self.win_score = win_score
 
     def print_board(self):
         """

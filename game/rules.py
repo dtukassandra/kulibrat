@@ -9,6 +9,7 @@ def get_legal_moves(board, current_player, players):
             if board[start_row][col] == " ":
                 moves.append(("insert", col))
 
+
     # Check for diagonal movement
     for r in range(4):
         for c in range(3):
