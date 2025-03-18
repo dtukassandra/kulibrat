@@ -1,9 +1,9 @@
-from board import Board
+from board import Kulibrat
 from rules import get_legal_moves
 
 
 def play_human_vs_human():
-    board = Board()
+    board = Kulibrat()
     players = {"B": 4, "R": 4}
     current_player = "B"
 
