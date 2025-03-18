@@ -1,7 +1,7 @@
-#board.py
+# board.py
 
 class Kulibrat:
-    def __init__(self, win_score=5):
+    def __init__(self):
         """
         Here I'm setting up the board as a 4x3 grid.
         Each spot can be:
@@ -29,9 +29,6 @@ class Kulibrat:
         current_player: we let Black start the game by default.
         """
         self.current_player = "B"
-        "Would be nice to make win_score dynamic so we won't have to change here and in main"
-
-        self.win_score = win_score
 
     def print_board(self):
         """
@@ -118,40 +115,3 @@ class Kulibrat:
 
         # Finally, we switch turns. If it was B, it becomes R; if it was R, it becomes B.
         self.current_player = opponent
-
-    def update_board(self, move, player, players):
-        move_type = move[0]
-
-        if move_type == "insert":
-            col = move[1]
-            row = 0 if player == "B" else 3
-            self.board[row][col] = player
-            players[player] -= 1  # Reduce the available pieces for insertion
-
-        elif move_type == "move":
-            (r1, c1), (r2, c2) = move[1], move[2]
-            self.board[r1][c1] = "."
-            if r2 == 4 or r2 == -1:  # Moving off the board
-                self.scores[player] += 1
-            else:
-                self.board[r2][c2] = player
-
-        elif move_type == "attack":
-            (r1, c1), (r2, c2) = move[1], move[2]
-            self.board[r1][c1] = "."
-            self.board[r2][c2] = player
-            players["R" if player == "B" else "B"] += 1  # Return the opponent's piece
-
-        elif move_type == "jump":
-            (r1, c1), (r2, c2) = move[1], move[2]
-            self.board[r1][c1] = "."
-            if r2 == 4 or r2 == -1:  # Jumping off the board
-                self.scores[player] += 1
-            else:
-                self.board[r2][c2] = player
-
-        elif move_type == "score":
-            (r, c) = move[1]
-            self.board[r][c] = "."
-            self.scores[player] += 1  # Increment score
-            players[player] += 1  # Allow reusing the piece
