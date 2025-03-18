@@ -1,79 +1,79 @@
-# main.py
 
 from game.board import Kulibrat
 from game.rules import get_legal_moves
 from agent.player import HumanPlayer
 from agent.random_agent import RandomAI
 
+
+def choose_agent(game):
+    """
+    Allows the user to choose an agent type for the Red player.
+    """
+    print("Choose agent for Red:")
+    print("1. Human Player")
+    print("2. Random AI")
+    print("3. Minimax AI")
+
+    while True:
+        choice = input("Enter choice (1-3): ")
+        if choice == "1":
+            HumanPlayer()  # Use game.py for human vs human mode
+            return None  # Exit after human vs human game ends
+        elif choice == "2":
+            return RandomAI(game)
+        elif choice == "3":
+            return MinimaxAI(game)
+        else:
+            print("Invalid choice. Please enter 1, 2, or 3.")
+
+
 def play_game():
     """
-    This function runs our round-based game loop.
-    In each round, Black moves first, then Red moves.
-    We only print the board once after both players have attempted to move.
+    Runs the round-based game loop with a fixed Black player (Human) and a chosen Red player.
     """
     game = Kulibrat()
-    black_player = HumanPlayer(game)
-    red_player = RandomAI(game)
 
-    # We'll say the first to reach 5 points wins. You can change this if you want a longer game.
+    black_player = HumanPlayer(game)  # Black player is always Human
+    red_player = choose_agent(game)  # Choose an agent for Red
+
+    if red_player is None:
+        return  # Exit if human vs human mode was triggered
+
+    players = {"Black": black_player, "Red": red_player}  # Store players as a dictionary
+
     winning_points = 5
 
     while True:
         # -------------------
         # BLACK TURN
         # -------------------
-        black_moves = get_legal_moves(game)
+        black_moves = get_legal_moves(game, "Black", players)
         if black_moves:
-            # If Black has valid moves, let the human pick one
-            chosen = black_player.choose_move(black_moves)
+            chosen = players["Black"].choose_move(black_moves)
             if chosen is not None:
-                # Apply the chosen move
                 game.make_move(chosen)
-                # Check if Black reached our winning threshold
-                if game.scores["B"] >= winning_points:
-                    print("Black reaches enough points! Game Over.")
-                    break
-            else:
-                print("No move returned for Black—skipping.")
-        else:
-            print("Black has no moves.")
-
-        # We'll check if the game is over only after Red tries to move too
 
         # -------------------
         # RED TURN
         # -------------------
-        red_moves = get_legal_moves(game)
+        red_moves = get_legal_moves(game, "Red", players)
         if red_moves:
-            # If Red has valid moves, let the random agent pick one
-            chosen = red_player.choose_move(red_moves)
+            chosen = players["Red"].choose_move(red_moves)
             if chosen is not None:
                 game.make_move(chosen)
-                # Check if Red reached the winning threshold
-                if game.scores["R"] >= winning_points:
-                    print("Red reaches enough points! Game Over.")
-                    break
-            else:
-                print("No move returned for Red—skipping.")
-        else:
-            print("Red has no moves.")
 
-        # -------------------
-        # ONE PRINT PER ROUND
-        # -------------------
-        # We only call print_board() here, so we see
-        # the state after both Black and Red have moved.
-        game.print_board()
-
-        # If both players had no moves, let's end the game immediately
-        if not black_moves and not red_moves:
-            print("Neither player can move => game ends.")
+        # Print the board and check for victory
+        print(game)
+        if game.get_score("Black") >= winning_points:
+            print("Black wins!")
+            break
+        if game.get_score("Red") >= winning_points:
+            print("Red wins!")
             break
 
-    # After the loop finishes, let's show the final state
-    print("Final board state:")
-    game.print_board()
-    print(f"Final Score: B={game.scores['B']}  R={game.scores['R']}")
 
 if __name__ == "__main__":
     play_game()
+
+
+
