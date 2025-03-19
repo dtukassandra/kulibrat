@@ -2,23 +2,92 @@ from game.board import Kulibrat
 from game.rules import get_legal_moves
 from agent.player import HumanPlayer
 from agent.minimax_agent import MinimaxAI  # Import Minimax agent
+from agent.random_agent import RandomAI
 
-def play_game():
-    game = Kulibrat()
-    black_player = HumanPlayer(game)
-    red_player = MinimaxAI(game, depth=3)  # Set AI depth (increase for smarter AI)
-    winning_points = 1  # Decide the winning threshold
+
+def setup_game():
 
     """
-    Print board and pieces at the start of the game
-    To initiate the game a guick list of rules will be displayed
+    First a quick welcome message with game rules
     """
+
     print("\nWelcome to Kulibrat! A two-player strategy game.")
     print("Rules:")
-    print("- Each player has", game.players['B'], "pieces and takes turns inserting or moving them.")
+    print("- Each player has 4 pieces and takes turns inserting or moving them.")
     print("- Move pieces diagonally forward to reach the opponent's start row and score.")
     print("- You can attack an opponent's piece if directly in front.")
     print("- You can jump over an opponent’s line if the space behind is free or outside the board.")
+
+    """
+    The player will start by choosing an opponent.
+    the choice can be made between: Minimax, random and human
+    """
+
+    # Choose Red Player (Opponent)
+    while True:
+        print("Please choose the desired opponent")
+        print("0 = Human")
+        print("1 = RandomAI")
+        print("2 = MinimaxAI")
+        choice = input("Choose Red player: ").strip()
+        if choice in {"0","1","2"}:
+            break
+        print("Invalid choice. Enter 1 or 2.")
+
+    if choice == "0":
+        red_player_type = HumanPlayer
+        print("You chose a Human opponent.")
+    elif choice == "1":
+        red_player_type = RandomAI
+        print("You chose an AI opponent.")
+    else:
+        red_player_type = MinimaxAI
+        print("You chose an AI opponent.")
+
+    """
+    Now the desired winning points can be chosen
+    """
+
+    # Choose Winning Points
+    while True:
+        try:
+            winning_points = int(input("Enter winning points (1-5 recommended): ").strip())
+            if winning_points > 0:
+                break
+        except ValueError:
+            pass
+        print("Invalid input. Please enter a positive number.")
+
+    """
+    Lastly, if the minimax agent is chosen,
+    the player can choose the desired difficulty
+    """
+
+    # Choose AI Difficulty (Minimax Depth) - Only applies if AI is chosen
+    ai_depth = 3  # Default AI depth
+    if red_player_type == MinimaxAI:
+        while True:
+            try:
+                ai_depth = int(input("Choose AI difficulty (1-5, higher is smarter): ").strip())
+                if 1 <= ai_depth <= 5:
+                    break
+            except ValueError:
+                pass
+            print("Invalid input. Enter a number between 1 and 5.")
+
+    return red_player_type, winning_points, ai_depth
+
+def play_game():
+
+    red_player_type, winning_points, ai_depth = setup_game()
+
+    game = Kulibrat()
+    black_player = HumanPlayer(game)
+
+    if red_player_type == MinimaxAI:
+        red_player = red_player_type(game, ai_depth)  # Set AI depth (increase for smarter AI)
+    else:
+        red_player = red_player_type(game)
 
     if winning_points == 1:
         print("- The first player to reach", winning_points, "point wins!")
