@@ -24,7 +24,6 @@ def setup_game():
     the choice can be made between: Minimax, random and human
     """
 
-    # Choose Red Player (Opponent)
     while True:
         print("")
         print("Please choose the desired opponent")
@@ -70,7 +69,6 @@ def setup_game():
     Lastly, the desired winning points can be chosen
     """
 
-    # Choose Winning Points
     while True:
         try:
             winning_points = int(input("Enter winning points (1-5 recommended): ").strip())
@@ -85,8 +83,14 @@ def setup_game():
 
 def play_game():
 
+    """
+    The settings from setup_game are called
+    """
     red_player_type, winning_points, ai_depth = setup_game()
 
+    """
+    In order to validate the settings: a guick message again
+    """
     print("")
     print("You are now ready to play!")
     print("This is the chosen opponent for your game:")
@@ -97,6 +101,10 @@ def play_game():
         pass
 
     print("")
+
+    """
+    Now, the settings are used for running the game
+    """
 
     game = Kulibrat()
     black_player = HumanPlayer(game)
@@ -113,8 +121,10 @@ def play_game():
 
     print("")
 
-    # Print board normally with B and R for players
-    # Print column headers
+    """
+    The board is printed before the first move
+    """
+
     print("     " + "   ".join(str(i) for i in range(3)))
     print("    --" + "---" * 3)
 
@@ -125,7 +135,10 @@ def play_game():
 
     print("")
 
-    # Display scores and pieces left for each player
+    """
+    The pieces available for each player
+    """
+
     print(f"Pieces assigned to each player: B={game.players['B']} R={game.players['R']}")
     print("-" * 20)
 
@@ -143,6 +156,10 @@ def play_game():
                     break
             else:
                 print("No move returned for Black—skipping.")
+
+            # Print board at the end of each player's turn
+            game.print_board()
+
         else:
             print("Black has no moves.")
 
@@ -160,13 +177,12 @@ def play_game():
                     break
             else:
                 print("No move returned for Red—skipping.")
+
+            # Print board at the end of each player's turn
+            game.print_board()
+
         else:
             print("Red has no moves.")
-
-        # -------------------
-        # PRINT BOARD ONCE PER ROUND
-        # -------------------
-        game.print_board()
 
         # If both players have no moves left, end the game
         if not black_moves and not red_moves:
