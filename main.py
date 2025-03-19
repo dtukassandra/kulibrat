@@ -31,8 +31,9 @@ def setup_game():
         print("1 = RandomAI")
         print("2 = MinimaxAI")
         print("")
-        choice = input("Choose Red player: ").strip()
+        choice = input("Opponent:").strip()
         if choice in {"0","1","2"}:
+            print("")
             break
         print("Invalid choice. Enter 0, 1 or 2.")
 
@@ -56,6 +57,7 @@ def setup_game():
         """
 
         while True:
+            Print("")
             try:
                 ai_depth = int(input("Please choose the desired difficulty for the AI between 1 and 5 (higher is smarter): ").strip())
                 if 1 <= ai_depth <= 5:
@@ -70,6 +72,7 @@ def setup_game():
     """
 
     while True:
+        print("")
         try:
             winning_points = int(input("Enter winning points (1-5 recommended): ").strip())
             if winning_points > 0:
