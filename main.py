@@ -64,7 +64,7 @@ def setup_game():
                     break
             except ValueError:
                 pass
-            print("Invalid input. Enter a number between 1 and 5.")
+            print("Invalid input. Enter a number between 1 and 10.")
 
 
     """
