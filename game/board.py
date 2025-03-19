@@ -10,7 +10,7 @@ class Kulibrat:
           '.' for empty
         At the start, every square is empty ('.').
         """
-        self.board = [["." for _ in range(3)] for _ in range(4)]
+        self.board = [[" " for _ in range(3)] for _ in range(4)]
 
         """
         players: tracks how many pieces each side (B or R) has
@@ -88,7 +88,7 @@ class Kulibrat:
             _, (r, c), (nr, nc) = move
             # Move the piece on the board
             self.board[nr][nc] = self.board[r][c]
-            self.board[r][c] = "."
+            self.board[r][c] = " "
 
         elif kind == "attack":
             # For an attack, it's ("attack", (r,c), (nr,nc))
@@ -97,14 +97,14 @@ class Kulibrat:
             self.players[opponent] += 1
             # Then the current player's piece occupies that square
             self.board[nr][nc] = self.board[r][c]
-            self.board[r][c] = "."
+            self.board[r][c] = " "
 
         elif kind == "jump":
             # For jumping over a contiguous line of opponent pieces,
             # we land in (nr,nc), e.g. ("jump", (r,c), (nr,nc))
             _, (r, c), (nr, nc) = move
             self.board[nr][nc] = self.board[r][c]
-            self.board[r][c] = "."
+            self.board[r][c] = " "
 
         elif kind == "jump_score":
             # For jumping off the board, e.g. ("jump_score", (r,c))
@@ -114,7 +114,7 @@ class Kulibrat:
             # ...and that piece returns to their reserve
             self.players[self.current_player] += 1
             # Remove it from the board
-            self.board[r][c] = "."
+            self.board[r][c] = " "
 
         else:
             # If we encounter a move type we didn't code for

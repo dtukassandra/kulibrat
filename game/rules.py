@@ -34,7 +34,7 @@ def _get_insert_moves(game):
         start_row = 0 if current_player == "B" else 3
         # Check each column in that row
         for col in range(3):
-            if board[start_row][col] == ".":
+            if board[start_row][col] == " ":
                 # This means it's a valid insert move
                 moves.append(("insert", col))
 
@@ -70,7 +70,7 @@ def _get_diagonal_moves(game):
                         moves.append(("jump_score", (r,c)))
                     else:
                         # If it's still on the board, check if the spot is empty
-                        if 0 <= nc < 3 and board[nr][nc] == ".":
+                        if 0 <= nc < 3 and board[nr][nc] == " ":
                             moves.append(("move", (r,c), (nr,nc)))
     return moves
 
@@ -145,7 +145,7 @@ def _get_jump_moves(game):
                             moves.append(("jump_score", (r,c)))
                         else:
                             # If it's on the board, check if empty => "jump"
-                            if board[final_r][c] == ".":
+                            if board[final_r][c] == " ":
                                 moves.append(("jump", (r,c), (final_r,c)))
 
     return moves
