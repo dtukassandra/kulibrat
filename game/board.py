@@ -42,6 +42,7 @@ class Kulibrat:
         # Print board normally with B and R for players
 
         # Print column headers
+        print("")
         print("     " + "   ".join(str(i) for i in range(3)))
         print("    --" + "---" * 3)
 
@@ -49,6 +50,8 @@ class Kulibrat:
         for i, row in enumerate(self.board):
             print(f" {chr(65 + i)} | " + " | ".join(row) + " |")
             print("    --" + "---" * 3)
+
+        print("")
 
         # Display scores and pieces left for each player
         print(f"Scores: B={self.scores['B']}, R={self.scores['R']}")

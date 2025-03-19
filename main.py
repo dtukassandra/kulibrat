@@ -21,10 +21,11 @@ def play_game():
     print("- You can jump over an opponent’s line if the space behind is free or outside the board.")
 
     if winning_points == 1:
-        print("- The first player to reach",winning_points,"point wins!")
+        print("- The first player to reach", winning_points, "point wins!")
     else:
-        print("- The first player to reach",winning_points,"points wins!")
+        print("- The first player to reach", winning_points, "points wins!")
 
+    print("")
 
     # Print board normally with B and R for players
     # Print column headers
@@ -35,6 +36,8 @@ def play_game():
     for i, row in enumerate(game.board):
         print(f" {chr(65 + i)} | " + " | ".join(row) + " |")
         print("    --" + "---" * 3)
+
+    print("")
 
     # Display scores and pieces left for each player
     print(f"Pieces assigned to each player: B={game.players['B']} R={game.players['R']}")
