@@ -9,6 +9,26 @@ def play_game():
     red_player = MinimaxAI(game, depth=3)  # Set AI depth (increase for smarter AI)
     winning_points = 5  # Decide the winning threshold
 
+    """
+    Print board and pieces at the start of the game
+    """
+
+    # Print board normally with B and R for players
+    # Print column headers
+    print("     " + "   ".join(str(i) for i in range(3)))
+    print("    --" + "---" * 3)
+
+    # Print each row with lettered row index
+    for i, row in enumerate(game.board):
+        print(f" {chr(65 + i)} | " + " | ".join(row) + " |")
+        print("    --" + "---" * 3)
+
+    # Display scores and pieces left for each player
+    print(f"Pieces in reserve: B={game.players['B']} R={game.players['R']}")
+    print("-" * 20)
+
+
+
     while True:
         # -------------------
         # BLACK TURN
