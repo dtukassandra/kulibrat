@@ -7,11 +7,24 @@ def play_game():
     game = Kulibrat()
     black_player = HumanPlayer(game)
     red_player = MinimaxAI(game, depth=3)  # Set AI depth (increase for smarter AI)
-    winning_points = 5  # Decide the winning threshold
+    winning_points = 1  # Decide the winning threshold
 
     """
     Print board and pieces at the start of the game
+    To initiate the game a guick list of rules will be displayed
     """
+    print("\nWelcome to Kulibrat! A two-player strategy game.")
+    print("Rules:")
+    print("- Each player has", game.players['B'], "pieces and takes turns inserting or moving them.")
+    print("- Move pieces diagonally forward to reach the opponent's start row and score.")
+    print("- You can attack an opponent's piece if directly in front.")
+    print("- You can jump over an opponent’s line if the space behind is free or outside the board.")
+
+    if winning_points == 1:
+        print("- The first player to reach",winning_points,"point wins!")
+    else:
+        print("- The first player to reach",winning_points,"points wins!")
+
 
     # Print board normally with B and R for players
     # Print column headers
@@ -24,10 +37,8 @@ def play_game():
         print("    --" + "---" * 3)
 
     # Display scores and pieces left for each player
-    print(f"Pieces in reserve: B={game.players['B']} R={game.players['R']}")
+    print(f"Pieces assigned to each player: B={game.players['B']} R={game.players['R']}")
     print("-" * 20)
-
-
 
     while True:
         # -------------------
