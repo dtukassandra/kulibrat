@@ -7,7 +7,6 @@ def play_game():
     game = Kulibrat()
     black_player = HumanPlayer(game)
     red_player = MinimaxAI(game, depth=3)  # Set AI depth (increase for smarter AI)
-
     winning_points = 5  # Decide the winning threshold
 
     while True:

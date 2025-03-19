@@ -40,8 +40,15 @@ class Kulibrat:
         print(f"Current Player: {self.current_player}")
 
         # Print board normally with B and R for players
-        for row in self.board:
-            print(" ".join(row))
+
+        # Print column headers
+        print("     " + "   ".join(str(i) for i in range(3)))
+        print("    --" + "---" * 3)
+
+        # Print each row with lettered row index
+        for i, row in enumerate(self.board):
+            print(f" {chr(65 + i)} | " + " | ".join(row) + " |")
+            print("    --" + "---" * 3)
 
         # Display scores and pieces left for each player
         print(f"Scores: B={self.scores['B']}, R={self.scores['R']}")

@@ -4,6 +4,9 @@ import random
 from game.rules import get_legal_moves
 
 class RandomAI:
+    players = {"B": 4, "R": 4}
+    current_player = "R"
+
     def __init__(self, game):
         """
         Here I'm storing a reference to the game object.
@@ -24,7 +27,7 @@ class RandomAI:
         """
         # If no move list was passed in, get them from the rules
         if available_moves is None:
-            available_moves = get_legal_moves(self.game)
+            available_moves = get_legal_moves(self.game,current_player,players)
 
         # If there aren't any moves, return None so we skip
         if not available_moves:

@@ -1,7 +1,7 @@
 # game.py
 
-from game.board import Kulibrat
-from game.rules import get_legal_moves
+from board import Kulibrat
+from rules import get_legal_moves
 
 def play_human_vs_human():
     game = Kulibrat()

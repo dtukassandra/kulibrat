@@ -1,6 +1,7 @@
 # player.py
 
 class HumanPlayer:
+
     def __init__(self, game):
         """
         I'm saving a reference to the main game object
@@ -8,6 +9,7 @@ class HumanPlayer:
         or access other game details if needed.
         """
         self.game = game
+
 
     def choose_move(self, available_moves):
         """
