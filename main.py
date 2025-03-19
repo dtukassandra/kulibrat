@@ -110,7 +110,7 @@ def play_game():
     """
 
     game = Kulibrat()
-    black_player = HumanPlayer(game)
+    black_player = RandomAI(game)
 
     if red_player_type == MinimaxAI:
         red_player = red_player_type(game, ai_depth)  # Set AI depth (increase for smarter AI)

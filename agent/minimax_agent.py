@@ -32,6 +32,10 @@ class MinimaxAI:
             game_copy = copy.deepcopy(self.game)
             game_copy.make_move(move)
 
+            # Check if this move is a goal scoring move
+            if game_copy.scores["R"] > self.game.scores["R"]:
+                return move  # Immediate scoring move, take it!
+
             # Get the Minimax score
             score = self._minimax(game_copy, self.depth, False)
 
@@ -88,7 +92,7 @@ class MinimaxAI:
         """
 
         # Weights for different factors
-        score_weight = 15  # Scoring is most important
+        score_weight = 35  # Scoring is most important
         attack_weight = 10  # Higher priority on attacking opponent pieces
         jump_weight = 12  # Slightly below scoring, but still important
         position_weight = 2  # Still rewards advancement but less than before
@@ -111,26 +115,26 @@ class MinimaxAI:
             for c in range(3):
                 piece = game.board[r][c]
 
-                if piece == "B":  # Black (our AI's pieces)
+                if piece == "R":  # Red (our AI's pieces)
                     position_eval += (3 - r) * position_weight  # Moving forward is good
 
                     # Check if this piece is in a position to attack Red
-                    if (r + 1 < 4) and game.board[r + 1][c] == "R":
+                    if (r + 1 < 4) and game.board[r + 1][c] == "B":
                         attack_eval += attack_weight  # Encourage attacking Red
 
                     # Check if this piece can perform a jump move
-                    if (r + 2 < 4) and game.board[r + 1][c] == "R" and game.board[r + 2][c] == ".":
+                    if (r + 2 < 4) and game.board[r + 1][c] == "B" and game.board[r + 2][c] == ".":
                         jump_eval += jump_weight  # Encourage jumps over enemy
 
-                elif piece == "R":  # Red (opponent)
+                elif piece == "B":  # black (opponent)
                     position_eval -= r * position_weight  # Encourage moving forward
 
                     # Check if this piece is in a position to attack Black
-                    if (r - 1 >= 0) and game.board[r - 1][c] == "B":
+                    if (r - 1 >= 0) and game.board[r - 1][c] == "R":
                         attack_eval -= attack_weight  # Discourage being attacked
 
                     # Check if this piece can perform a jump move
-                    if (r - 2 >= 0) and game.board[r - 1][c] == "B" and game.board[r - 2][c] == ".":
+                    if (r - 2 >= 0) and game.board[r - 1][c] == "R" and game.board[r - 2][c] == ".":
                         jump_eval -= jump_weight  # Discourage opponent jumps
 
         # Blocking opponent: If Black has many moves and Red has few, it's good for Black
