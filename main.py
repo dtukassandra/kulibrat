@@ -12,6 +12,7 @@ def setup_game():
     """
 
     print("\nWelcome to Kulibrat! A two-player strategy game.")
+    print("")
     print("Rules:")
     print("- Each player has 4 pieces and takes turns inserting or moving them.")
     print("- Move pieces diagonally forward to reach the opponent's start row and score.")
@@ -25,27 +26,48 @@ def setup_game():
 
     # Choose Red Player (Opponent)
     while True:
+        print("")
         print("Please choose the desired opponent")
         print("0 = Human")
         print("1 = RandomAI")
         print("2 = MinimaxAI")
+        print("")
         choice = input("Choose Red player: ").strip()
         if choice in {"0","1","2"}:
             break
-        print("Invalid choice. Enter 1 or 2.")
+        print("Invalid choice. Enter 0, 1 or 2.")
+
+    ai_depth = 3
 
     if choice == "0":
         red_player_type = HumanPlayer
-        print("You chose a Human opponent.")
+        print("You chose a Human opponent!")
+        print("This is a two-player game, and you will each take turns to move.")
     elif choice == "1":
         red_player_type = RandomAI
-        print("You chose an AI opponent.")
+        print("You chose the RandomAI opponent!")
+        print("This AI will only pick a random move from the list of valid moves.")
     else:
         red_player_type = MinimaxAI
-        print("You chose an AI opponent.")
+        print("You chose the MinimaxAI opponent!")
+        print("This AI will choose the best option based on the minimax algorithm")
+
+        """
+        the player should now choose the desired difficulty
+        """
+
+        while True:
+            try:
+                ai_depth = int(input("Please choose the desired difficulty for the AI between 1 and 5 (higher is smarter): ").strip())
+                if 1 <= ai_depth <= 5:
+                    break
+            except ValueError:
+                pass
+            print("Invalid input. Enter a number between 1 and 5.")
+
 
     """
-    Now the desired winning points can be chosen
+    Lastly, the desired winning points can be chosen
     """
 
     # Choose Winning Points
@@ -58,28 +80,23 @@ def setup_game():
             pass
         print("Invalid input. Please enter a positive number.")
 
-    """
-    Lastly, if the minimax agent is chosen,
-    the player can choose the desired difficulty
-    """
-
-    # Choose AI Difficulty (Minimax Depth) - Only applies if AI is chosen
-    ai_depth = 3  # Default AI depth
-    if red_player_type == MinimaxAI:
-        while True:
-            try:
-                ai_depth = int(input("Choose AI difficulty (1-5, higher is smarter): ").strip())
-                if 1 <= ai_depth <= 5:
-                    break
-            except ValueError:
-                pass
-            print("Invalid input. Enter a number between 1 and 5.")
 
     return red_player_type, winning_points, ai_depth
 
 def play_game():
 
     red_player_type, winning_points, ai_depth = setup_game()
+
+    print("")
+    print("You are now ready to play!")
+    print("This is the chosen opponent for your game:")
+    print("Player type:", red_player_type)
+    if red_player_type == MinimaxAI:
+        print("AI difficulty:", ai_depth)
+    else:
+        pass
+
+    print("")
 
     game = Kulibrat()
     black_player = HumanPlayer(game)
@@ -90,9 +107,9 @@ def play_game():
         red_player = red_player_type(game)
 
     if winning_points == 1:
-        print("- The first player to reach", winning_points, "point wins!")
+        print("The first player to reach", winning_points, "point wins!")
     else:
-        print("- The first player to reach", winning_points, "points wins!")
+        print("The first player to reach", winning_points, "points wins!")
 
     print("")
 
