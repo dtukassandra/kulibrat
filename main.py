@@ -57,7 +57,7 @@ def setup_game():
         """
 
         while True:
-            Print("")
+            print("")
             try:
                 ai_depth = int(input("Please choose the desired difficulty for the AI between 1 and 5 (higher is smarter): ").strip())
                 if 1 <= ai_depth <= 5:
