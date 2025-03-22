@@ -23,48 +23,94 @@ def setup_game():
     The player will start by choosing an opponent.
     the choice can be made between: Minimax, random and human
     """
+    ai_depth_red = 3
+    ai_depth_black = 3
 
     while True:
+        print("Choose whether you are playing or benchmarking")
+        print("0 - Playing")
+        print("1 - Benchmarking")
         print("")
+        choice = input("Your choice: ")
+        if choice == "1":
+            print("Choose the benchmark:")
+            print("0 - MinimaxAI")
+            print("1 - RandomAI")
+            choice = input("Your choice: ")
+
+            if choice == "0":
+                black_player_type = MinimaxAI
+                try:
+                    ai_depth_black = int(input(
+                        "Please choose the desired difficulty for the AI between 1 and 5 (higher is smarter): ").strip())
+                    if 1 <= ai_depth_black <= 5:
+                        break
+                except ValueError:
+                    pass
+                print("Invalid input. Invalid input. Enter a number between 1 and 5.")
+                break
+
+            elif choice == "1":
+                black_player_type = RandomAI
+                break
+
+            else:
+                pass
+                print("Invalid input. Please write the name of the AI.")
+
+        elif choice == "0":
+            black_player_type = HumanPlayer
+            print("You are playing")
+            break
+
+        else:
+            pass
+            print("Invalid input. Please write the number 0 or 1.")
+
+
+    while True:
         print("Please choose the desired opponent")
-        print("0 = Human")
-        print("1 = RandomAI")
-        print("2 = MinimaxAI")
+        print("0 - Human")
+        print("1 - RandomAI")
+        print("2 - MinimaxAI")
         print("")
         choice = input("Opponent:").strip()
-        if choice in {"0","1","2"}:
+        if choice not in {"0","1","2"}:
+            pass
             print("")
-            break
-        print("Invalid choice. Enter 0, 1 or 2.")
+            print("Invalid choice. Enter 0, 1 or 2.")
 
-    ai_depth = 3
+        else:
 
-    if choice == "0":
-        red_player_type = HumanPlayer
-        print("You chose a Human opponent!")
-        print("This is a two-player game, and you will each take turns to move.")
-    elif choice == "1":
-        red_player_type = RandomAI
-        print("You chose the RandomAI opponent!")
-        print("This AI will only pick a random move from the list of valid moves.")
-    else:
-        red_player_type = MinimaxAI
-        print("You chose the MinimaxAI opponent!")
-        print("This AI will choose the best option based on the minimax algorithm")
+            if choice == "0":
+                red_player_type = HumanPlayer
+                print("You chose a Human opponent!")
+                print("This is a two-player game, and you will each take turns to move.")
+                break
+            elif choice == "1":
+                red_player_type = RandomAI
+                print("You chose the RandomAI opponent!")
+                print("This AI will only pick a random move from the list of valid moves.")
+                break
+            else:
+                red_player_type = MinimaxAI
+                print("You chose the MinimaxAI opponent!")
+                print("This AI will choose the best option based on the minimax algorithm")
 
-        """
-        the player should now choose the desired difficulty
-        """
+                """
+                the player should now choose the desired difficulty
+                """
 
-        while True:
-            print("")
-            try:
-                ai_depth = int(input("Please choose the desired difficulty for the AI between 1 and 5 (higher is smarter): ").strip())
-                if 1 <= ai_depth <= 5:
-                    break
-            except ValueError:
-                pass
-            print("Invalid input. Enter a number between 1 and 10.")
+                while True:
+                    print("")
+                    try:
+                        ai_depth_red = int(input("Please choose the desired difficulty for the AI between 1 and 5 (higher is smarter): ").strip())
+                        if 1 <= ai_depth_red <= 5:
+                            break
+                    except ValueError:
+                        pass
+                    print("Invalid input. Enter a number between 1 and 5.")
+                break
 
 
     """
@@ -82,14 +128,14 @@ def setup_game():
         print("Invalid input. Please enter a positive number.")
 
 
-    return red_player_type, winning_points, ai_depth
+    return red_player_type, black_player_type, winning_points, ai_depth_black, ai_depth_red
 
 def play_game():
 
     """
     The settings from setup_game are called
     """
-    red_player_type, winning_points, ai_depth = setup_game()
+    red_player_type, black_player_type, winning_points, ai_depth_black, ai_depth_red = setup_game()
 
     """
     In order to validate the settings: a guick message again
@@ -97,9 +143,15 @@ def play_game():
     print("")
     print("You are now ready to play!")
     print("This is the chosen opponent for your game:")
-    print("Player type:", red_player_type)
+    print("Black player type", black_player_type)
+    print("Red player type:", red_player_type)
+    if black_player_type == MinimaxAI:
+        print("Black player AI difficulty:", ai_depth_black)
+    else:
+        pass
+
     if red_player_type == MinimaxAI:
-        print("AI difficulty:", ai_depth)
+        print("Red player AI difficulty:", ai_depth_red)
     else:
         pass
 
@@ -110,10 +162,13 @@ def play_game():
     """
 
     game = Kulibrat()
-    black_player = RandomAI(game)
+    if black_player_type == MinimaxAI:
+        black_player = black_player_type(game, ai_depth_black)  # Set AI depth (increase for smarter AI)
+    else:
+        black_player = black_player_type(game)
 
     if red_player_type == MinimaxAI:
-        red_player = red_player_type(game, ai_depth)  # Set AI depth (increase for smarter AI)
+        red_player = red_player_type(game, ai_depth_red)  # Set AI depth (increase for smarter AI)
     else:
         red_player = red_player_type(game)
 
