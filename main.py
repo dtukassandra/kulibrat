@@ -133,10 +133,6 @@ def setup_game():
 def benchmark_game():
 
     print("Benchmarking...")
-    """
-    The settings from setup_game are called
-    """
-    red_player_type, black_player_type, winning_points, ai_depth_black, ai_depth_red = setup_game()
 
     """
     In order to validate the settings: a guick message again
@@ -255,12 +251,7 @@ def benchmark_game():
 
 def play_game():
 
-    print("Playing..")
-
-    """
-    The settings from setup_game are called
-    """
-    red_player_type, black_player_type, winning_points, ai_depth_black, ai_depth_red = setup_game()
+    print("Playing...")
 
     """
     In order to validate the settings: a guick message again
@@ -270,10 +261,6 @@ def play_game():
     print("This is the chosen opponent for your game:")
     print("Black player type", black_player_type)
     print("Red player type:", red_player_type)
-    if black_player_type == MinimaxAI:
-        print("Black player AI difficulty:", ai_depth_black)
-    else:
-        pass
 
     if red_player_type == MinimaxAI:
         print("Red player AI difficulty:", ai_depth_red)
@@ -287,10 +274,7 @@ def play_game():
     """
 
     game = Kulibrat()
-    if black_player_type == MinimaxAI:
-        black_player = black_player_type(game, ai_depth_black)  # Set AI depth (increase for smarter AI)
-    else:
-        black_player = black_player_type(game)
+    black_player = black_player_type(game)
 
     if red_player_type == MinimaxAI:
         red_player = red_player_type(game, ai_depth_red)  # Set AI depth (increase for smarter AI)
@@ -378,6 +362,11 @@ def play_game():
     print(f"Final Score: B={game.scores['B']}  R={game.scores['R']}")
 
 if __name__ == "__main__":
+
+    """
+    The settings from setup_game are called
+    """
+
     red_player_type, black_player_type, winning_points, ai_depth_black, ai_depth_red = setup_game()
     print(black_player_type)
     if black_player_type is HumanPlayer:
