@@ -3,7 +3,8 @@ from game.rules import get_legal_moves
 from agent.player import HumanPlayer
 from agent.minimax_agent import MinimaxAI  # Import Minimax agent
 from agent.random_agent import RandomAI
-
+import os
+import csv
 
 def setup_game():
 
@@ -227,6 +228,49 @@ def benchmark_game():
     print(f"Red win rate: {red_wins / benchmark_size * 100:.2f}%")
     print(f"Draw rate: {draws / benchmark_size * 100:.2f}%")
     print(f"Average number of turns per game: {avg_turns:.2f}")
+
+    """
+        Generate Dynamic File Name for CSV
+        """
+    black_player_name = black_player_type.__name__
+    red_player_name = red_player_type.__name__
+
+    # Append AI depth to MinimaxAI if selected
+    if black_player_type == MinimaxAI:
+        black_player_name += f"{ai_depth_black}"
+    if red_player_type == MinimaxAI:
+        red_player_name += f"{ai_depth_red}"
+
+    filename = f"{black_player_name}_vs_{red_player_name}_{benchmark_size}.csv"
+
+    """
+    Create a Subfolder for Results (if not exists)
+    """
+    results_folder = os.path.join(os.getcwd(), "benchmark_results")
+    os.makedirs(results_folder, exist_ok=True)  # Create the folder if it doesn't exist
+
+    """
+    Write Results to a CSV File Inside the Subfolder
+    """
+    csv_path = os.path.join(results_folder, filename)
+
+    with open(csv_path, mode="w", newline="") as file:
+        writer = csv.writer(file)
+
+        # Write Header
+        writer.writerow(["Game", "Winner", "Turns"])
+
+        # Write Game Results
+        writer.writerows(results)
+
+        # Write Summary Statistics
+        writer.writerow([])
+        writer.writerow(["Black Wins", black_wins])
+        writer.writerow(["Red Wins", red_wins])
+        writer.writerow(["Draws", draws])
+        writer.writerow(["Average Turns", avg_turns])
+
+    print(f"CSV file saved to: {csv_path}")
 
 
 def play_game():
