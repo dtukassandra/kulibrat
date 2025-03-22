@@ -33,7 +33,7 @@ def setup_game():
         print("")
         choice = input("Your choice: ")
         if choice == "1":
-            print("Choose the benchmark:")
+            print("Choose the AI for the black player:")
             print("0 - MinimaxAI")
             print("1 - RandomAI")
             choice = input("Your choice: ")
@@ -69,7 +69,7 @@ def setup_game():
 
 
     while True:
-        print("Please choose the desired opponent")
+        print("Please choose the AI for the red player:")
         print("0 - Human")
         print("1 - RandomAI")
         print("2 - MinimaxAI")
@@ -130,124 +130,104 @@ def setup_game():
 
     return red_player_type, black_player_type, winning_points, ai_depth_black, ai_depth_red
 
-def benchmark_game():
 
+def benchmark_game():
     print("Benchmarking...")
 
     """
-    In order to validate the settings: a guick message again
+    Running the benchmark
     """
+    benchmark_size = 10
+    results = []  # Store results as a list of tuples (Game, Winner, Turns)
+
+    for game_num in range(1, benchmark_size + 1):
+        print(f"Starting Benchmark Game {game_num}/{benchmark_size}...\n")
+
+        # Reinitialize the game for each run
+        game = Kulibrat()
+
+        # Assign players again
+        black_player = black_player_type(game, ai_depth_black) if black_player_type == MinimaxAI else black_player_type(
+            game)
+        red_player = red_player_type(game, ai_depth_red) if red_player_type == MinimaxAI else red_player_type(game)
+
+        # Track the number of turns
+        turn_count = 0
+        winner = None  # Track winner
+
+        while True:
+            # -------------------
+            # BLACK TURN
+            # -------------------
+            black_moves = get_legal_moves(game)
+            if black_moves:
+                chosen = black_player.choose_move(black_moves)
+                if chosen is not None:
+                    game.make_move(chosen)
+                    turn_count += 1
+                    if game.scores["B"] >= winning_points:
+                        winner = "Black"
+                        print(f"Game {game_num}: Black wins after {turn_count} turns!")
+                        break
+                game.print_board()
+
+            # -------------------
+            # RED TURN
+            # -------------------
+            red_moves = get_legal_moves(game)
+            if red_moves:
+                chosen = red_player.choose_move(red_moves)
+                if chosen is not None:
+                    game.make_move(chosen)
+                    turn_count += 1
+                    if game.scores["R"] >= winning_points:
+                        winner = "Red"
+                        print(f"Game {game_num}: Red wins after {turn_count} turns!")
+                        break
+                game.print_board()
+
+            # If both players cannot move, game ends
+            if not black_moves and not red_moves:
+                print(f"Game {game_num}: Draw! Neither player can move.")
+                winner = "Draw"
+                break
+
+        results.append((game_num, winner, turn_count))  # Store result
+
+        print("-" * 30)  # Separate games for clarity
+
+    """
+    Display Benchmark Results in a Simple Table
+    """
+    print("\nBenchmark Results:")
+    print("=" * 40)
+    print(f"{'Game':<8}{'Winner':<10}{'Turns'}")
+    print("-" * 40)
+
+    for game, winner, turns in results:
+        print(f"{game:<8}{winner:<10}{turns}")
+
+    print("=" * 40)
+
+    # Calculate summary statistics
+    black_wins = sum(1 for _, winner, _ in results if winner == "Black")
+    red_wins = sum(1 for _, winner, _ in results if winner == "Red")
+    draws = sum(1 for _, winner, _ in results if winner == "Draw")
+    avg_turns = sum(turns for _, _, turns in results) / benchmark_size
+
     print("")
-    print("You are now ready to play!")
-    print("This is the chosen opponent for your game:")
-    print("Black player type", black_player_type)
+    print("Black player type:", black_player_type)
     print("Red player type:", red_player_type)
     if black_player_type == MinimaxAI:
         print("Black player AI difficulty:", ai_depth_black)
-    else:
-        pass
-
     if red_player_type == MinimaxAI:
         print("Red player AI difficulty:", ai_depth_red)
-    else:
-        pass
+    print("Points to win pr. game: ", winning_points)
+    print(f"Black win rate: {black_wins / benchmark_size * 100:.2f}%")
+    print(f"Red win rate: {red_wins / benchmark_size * 100:.2f}%")
+    print(f"Draw rate: {draws / benchmark_size * 100:.2f}%")
+    print(f"Average number of turns per game: {avg_turns:.2f}")
 
-    print("")
-
-    """
-    Now, the settings are used for running the game
-    """
-
-    game = Kulibrat()
-    if black_player_type == MinimaxAI:
-        black_player = black_player_type(game, ai_depth_black)  # Set AI depth (increase for smarter AI)
-    else:
-        black_player = black_player_type(game)
-
-    if red_player_type == MinimaxAI:
-        red_player = red_player_type(game, ai_depth_red)  # Set AI depth (increase for smarter AI)
-    else:
-        red_player = red_player_type(game)
-
-    if winning_points == 1:
-        print("The first player to reach", winning_points, "point wins!")
-    else:
-        print("The first player to reach", winning_points, "points wins!")
-
-    print("")
-
-    """
-    The board is printed before the first move
-    """
-
-    print("     " + "   ".join(str(i) for i in range(3)))
-    print("    --" + "---" * 3)
-
-    # Print each row with lettered row index
-    for i, row in enumerate(game.board):
-        print(f" {chr(65 + i)} | " + " | ".join(row) + " |")
-        print("    --" + "---" * 3)
-
-    print("")
-
-    """
-    The pieces available for each player
-    """
-
-    print(f"Pieces assigned to each player: B={game.players['B']} R={game.players['R']}")
-    print("-" * 20)
-
-    while True:
-        # -------------------
-        # BLACK TURN
-        # -------------------
-        black_moves = get_legal_moves(game)
-        if black_moves:
-            chosen = black_player.choose_move(black_moves)
-            if chosen is not None:
-                game.make_move(chosen)
-                if game.scores["B"] >= winning_points:
-                    print("Black reaches enough points! Game Over.")
-                    break
-            else:
-                print("No move returned for Black—skipping.")
-
-            # Print board at the end of each player's turn
-            game.print_board()
-
-        else:
-            print("Black has no moves.")
-
-        # -------------------
-        # RED TURN (AI - Minimax)
-        # -------------------
-        red_moves = get_legal_moves(game)
-        if red_moves:
-            chosen = red_player.choose_move(red_moves)
-            if chosen is not None:
-                print(f"🤖 AI chooses: {chosen}")  # Let player see AI's move
-                game.make_move(chosen)
-                if game.scores["R"] >= winning_points:
-                    print("Red reaches enough points! Game Over.")
-                    break
-            else:
-                print("No move returned for Red—skipping.")
-
-            # Print board at the end of each player's turn
-            game.print_board()
-
-        else:
-            print("Red has no moves.")
-
-        # If both players have no moves left, end the game
-        if not black_moves and not red_moves:
-            print("Neither player can move => game ends.")
-            break
-
-    # Final board state
-    print("Final board state:")
-    game.print_board()
-    print(f"Final Score: B={game.scores['B']}  R={game.scores['R']}")
 
 def play_game():
 
@@ -368,7 +348,6 @@ if __name__ == "__main__":
     """
 
     red_player_type, black_player_type, winning_points, ai_depth_black, ai_depth_red = setup_game()
-    print(black_player_type)
     if black_player_type is HumanPlayer:
         play_game()
     else:
