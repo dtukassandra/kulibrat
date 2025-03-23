@@ -241,7 +241,7 @@ def benchmark_game():
     if red_player_type == MinimaxAI:
         red_player_name += f"{ai_depth_red}"
 
-    filename = f"{black_player_name}_vs_{red_player_name}_{benchmark_size}.csv"
+    filename = f"{black_player_name}_vs_{red_player_name}_{winning_points}_{benchmark_size}.csv"
 
     """
     Create a Subfolder for Results (if not exists)
