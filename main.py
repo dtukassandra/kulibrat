@@ -138,7 +138,7 @@ def benchmark_game():
     """
     Running the benchmark
     """
-    benchmark_size = 10
+    benchmark_size = 100
     results = []  # Store results as a list of tuples (Game, Winner, Turns)
 
     for game_num in range(1, benchmark_size + 1):
@@ -264,11 +264,16 @@ def benchmark_game():
         writer.writerows(results)
 
         # Write Summary Statistics
+        writer.writerow(["Points to win pr. game", winning_points])
+        writer.writerow(["Black Wins", black_wins])
         writer.writerow([])
         writer.writerow(["Black Wins", black_wins])
         writer.writerow(["Red Wins", red_wins])
         writer.writerow(["Draws", draws])
         writer.writerow(["Average Turns", avg_turns])
+        writer.writerow(["Black win rate", black_wins / benchmark_size * 100])
+        writer.writerow(["Red win rate", red_wins / benchmark_size * 100])
+        writer.writerow(["Draw rate", draws / benchmark_size * 100])
 
     print(f"CSV file saved to: {csv_path}")
 
