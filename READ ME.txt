@@ -1,0 +1,17 @@
+To play the game, one must first choose a gamemode: Playing or Benchmarking
+
+- When Benchmarking is selected, it is possible to choose a random or minimax agent for the first player. The second player can be human, random or minimax. If minimax is selected, the desired depth will need to be chosen as well.
+
+Then, the number of points pr. Game can be selected.
+
+- When Playing is selected, it is possible to choose between the three agents for both the black and red player. If minimax is selected, the desired depth will need to be chosen as well. Thereafter, the number of points to win is selected.
+
+The board will name appear and the game begin. If a benchmark scenario is chosen the game will play out until the winning points are reached or both players are out of moves.
+
+The rules of the game is explained when the game is started.
+
+In the first turn, the player must select a row to start.
+
+After the first turn, the player can choose to move diagonally forward or place another piece in the start row. If an "Attack" or "Jump" move is available, this will be possible too. (See kulibrat rules for further explanations on when those move are available).
+
+The first person to reach the desired number of points to win, wins the game. If the gamomode is Benchmark, a new game will immediately begin and the results tracked. As a standard, a benchmark will consist of 100 games. If anything else is desired, this has to be changed in the main file, but it is not recommended to run the benchmarks unless new tests are formed. There is a folder named benchmark_results that houses most of the useful benchmarks. 
