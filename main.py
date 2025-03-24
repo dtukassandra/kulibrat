@@ -230,8 +230,8 @@ def benchmark_game():
     print(f"Average number of turns per game: {avg_turns:.2f}")
 
     """
-        Generate Dynamic File Name for CSV
-        """
+    Generate Dynamic File Name for CSV
+    """
     black_player_name = black_player_type.__name__
     red_player_name = red_player_type.__name__
 
